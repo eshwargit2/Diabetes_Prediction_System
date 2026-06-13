@@ -1,3 +1,5 @@
+#V1 branch
+
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from tkinter import ttk, filedialog
@@ -92,12 +94,11 @@ def go_to_enter_variables_page():
     tk.Button(enter_vars_window, text="Preview Dataset", command=preview_dataset, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 
     #button to go back to the main page
-    tk.Button(enter_vars_window, text="Back", command=enter_vars_window.destroy,  bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
-     
-    if df is not None:
-        enter_vars_window()      # open another window
-    else:
+    def go_back_to_root():
+        enter_vars_window.destroy()
         root.deiconify()
+    
+    tk.Button(enter_vars_window, text="Back", command=go_back_to_root,  bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
      # Show the preview button after loading the dataset
 # Function to go to the algorithm selection page
 def go_to_algorithm_page():
@@ -111,6 +112,12 @@ def go_to_algorithm_page():
         go_to_train_model_page()
 
     tk.Button(algo_window, text="Select Logistic Regression", command=select_algorithm, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
+    
+    def go_back_to_root():
+        algo_window.destroy()
+        root.deiconify()
+    
+    tk.Button(algo_window, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 
 # Function to go to the training model page
 def go_to_train_model_page():
@@ -152,6 +159,12 @@ def go_to_train_model_page():
 
     tk.Button(train_model_window, text="Train Model", command=train_model, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
     tk.Button(train_model_window, text="Go to Prediction Page", command=go_to_prediction_page, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
+    
+    def go_back_to_root():
+        train_model_window.destroy()
+        root.deiconify()
+    
+    tk.Button(train_model_window, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 
 # Function to go to the prediction page
 def go_to_prediction_page():
@@ -189,6 +202,12 @@ def go_to_prediction_page():
             messagebox.showerror("Error", "Please enter valid numeric values.")
 
     tk.Button(prediction_window, text="Predict", command=predict, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
+    
+    def go_back_to_root():
+        prediction_window.destroy()
+        root.deiconify()
+    
+    tk.Button(prediction_window, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 
 
 
