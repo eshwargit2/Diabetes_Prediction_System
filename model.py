@@ -11,7 +11,6 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 # Global variables
-
 df = None
 X = None
 y = None
@@ -19,7 +18,9 @@ indep_selected = None
 classifier = None
 scaler = None
 
-# Function to load the dataset
+
+
+# Function to load the dataset ,--------------first page 
 def load_dataset():
     global df
     file_path = filedialog.askopenfilename(filetypes=[("CSV Files", "*.csv")])
@@ -32,10 +33,6 @@ def load_dataset():
             #show dataset in the console
             preview_button.pack(side="left", padx=15)  # Show the preview button after loading the dataset
             
-
-
-  
-
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load dataset: {e}")
     else:
@@ -56,6 +53,8 @@ def go_to_enter_variables_page():
     # Independent variables input
     tk.Label(enter_vars_window, text="Independent variables are selected automatically.", bg='#ff7f50', fg='#1e3d58', font=("Helvetica", 16, 'bold')).pack(pady=10)
 
+
+    #set variable ---------------------second page 
     def set_variables():
         selected_dep = dep_entry.get().strip()
 
@@ -99,8 +98,10 @@ def go_to_enter_variables_page():
         root.deiconify()
     
     tk.Button(enter_vars_window, text="Back", command=go_back_to_root,  bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
-     # Show the preview button after loading the dataset
-# Function to go to the algorithm selection page
+    
+
+
+# Function to go to the algorithm selection page, third page -------------------------------------
 def go_to_algorithm_page():
     algo_window = tk.Toplevel(root)
     algo_window.title("Select Algorithm")
@@ -119,7 +120,7 @@ def go_to_algorithm_page():
     
     tk.Button(algo_window, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 
-# Function to go to the training model page
+# Function to go to the training model page , 4th page ---------------------------------------
 def go_to_train_model_page():
     train_model_window = tk.Toplevel(root)
     train_model_window.title("Train Model")
@@ -153,6 +154,7 @@ def go_to_train_model_page():
                 f"Confusion Matrix:\n{conf_matrix}\n\n"
                 f"Classification Report:\n{class_report}"
             )
+            #popup message , model traind result 
             messagebox.showinfo("Model Result", result_text)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred while training the model: {e}")
@@ -166,7 +168,7 @@ def go_to_train_model_page():
     
     tk.Button(train_model_window, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 
-# Function to go to the prediction page
+# Function to go to the prediction page , 5th page -------------------------
 def go_to_prediction_page():
     prediction_window = tk.Toplevel(root)
     prediction_window.title("Enter Input Values")
@@ -212,15 +214,13 @@ def go_to_prediction_page():
 
 
 
-#table 
 
 
-# Main window
+# Main , first Window-------------------------
 root = tk.Tk()
 root.title("Diabetes Prediction")
 root.geometry("800x600")
 root.configure(bg='gray')
-
 
 navbar = tk.Frame(root, bg="#2C3E50", height=60)
 navbar.pack(fill="x")   # full width
@@ -238,7 +238,6 @@ title.pack(pady=15)
 
 tk.Button(root, text="Load Dataset", command=load_dataset, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 next_button = tk.Button(root, text="Next", command=go_to_enter_variables_page, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4)
-
 
 
 # preview dataset function----
@@ -295,13 +294,6 @@ def preview_dataset():
     scroll_x.pack(side="bottom", fill="x")
     tree.pack(fill="both", expand=True)
 
-
-
 preview_button =tk.Button(root, text="Preview Dataset", command=preview_dataset, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4)
-# preview_button = tk.Button(
-#     root,
-#     text="Preview Dataset",
-#     command=preview_dataset
-# )
 
 root.mainloop()
