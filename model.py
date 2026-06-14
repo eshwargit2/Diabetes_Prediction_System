@@ -9,6 +9,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 # Global variables
+
 df = None
 X = None
 y = None
