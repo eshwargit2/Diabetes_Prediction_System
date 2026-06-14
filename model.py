@@ -20,7 +20,7 @@ scaler = None
 
 
 
-# Function to load the dataset ,--------------first page 
+# Function to load the dataset ,--------------first page---------------------------------------------
 def load_dataset():
     global df
     file_path = filedialog.askopenfilename(filetypes=[("CSV Files", "*.csv")])
@@ -28,10 +28,10 @@ def load_dataset():
         try:
             df = pd.read_csv(file_path)
             messagebox.showinfo("Info", f"Dataset Loaded Successfully!\nColumns: {', '.join(df.columns)}")
-            next_button.pack(side="left", padx=15)  # Enable the Next button after loading the dataset
-
+            
             #show dataset in the console
-            preview_button.pack(side="left", padx=15)  # Show the preview button after loading the dataset
+            preview_button.pack(pady=20)  # Show the preview button after loading the dataset
+            next_button.pack(pady=20)  # Enable the Next button after loading the dataset
             
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load dataset: {e}")
@@ -54,7 +54,7 @@ def go_to_enter_variables_page():
     tk.Label(enter_vars_window, text="Independent variables are selected automatically.", bg='#ff7f50', fg='#1e3d58', font=("Helvetica", 16, 'bold')).pack(pady=10)
 
 
-    #set variable ---------------------second page 
+#set variable ---------------------second page--------------------------------------
     def set_variables():
         selected_dep = dep_entry.get().strip()
 
@@ -101,7 +101,7 @@ def go_to_enter_variables_page():
     
 
 
-# Function to go to the algorithm selection page, third page -------------------------------------
+# Function to go to the algorithm selection page,------------------third page -------------------------------------
 def go_to_algorithm_page():
     algo_window = tk.Toplevel(root)
     algo_window.title("Select Algorithm")
@@ -120,7 +120,7 @@ def go_to_algorithm_page():
     
     tk.Button(algo_window, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 
-# Function to go to the training model page , 4th page ---------------------------------------
+# Function to go to the training model page ,------------------------4th page ---------------------------------------
 def go_to_train_model_page():
     train_model_window = tk.Toplevel(root)
     train_model_window.title("Train Model")
@@ -168,7 +168,7 @@ def go_to_train_model_page():
     
     tk.Button(train_model_window, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
 
-# Function to go to the prediction page , 5th page -------------------------
+# Function to go to the prediction page , ----------------------------5th page -------------------------
 def go_to_prediction_page():
     prediction_window = tk.Toplevel(root)
     prediction_window.title("Enter Input Values")
@@ -216,7 +216,7 @@ def go_to_prediction_page():
 
 
 
-# Main , first Window-------------------------
+# Main , ---------------------------------------------root  Window-------------------------
 root = tk.Tk()
 root.title("Diabetes Prediction")
 root.geometry("800x600")
@@ -236,8 +236,8 @@ title = tk.Label(
 
 title.pack(pady=15)
 
-tk.Button(root, text="Load Dataset", command=load_dataset, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
-next_button = tk.Button(root, text="Next", command=go_to_enter_variables_page, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4)
+tk.Button(root, text="Load Dataset", command=load_dataset, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=5).pack(pady=30)
+next_button = tk.Button(root, text="Next", command=go_to_enter_variables_page, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=5)
 
 
 # preview dataset function----
