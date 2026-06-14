@@ -44,15 +44,33 @@ def go_to_enter_variables_page():
     enter_vars_window = tk.Toplevel(root)
     enter_vars_window.title("Enter Variables")
     enter_vars_window.geometry("800x600")
-    enter_vars_window.configure(bg='gray')  # Coral background color
+    enter_vars_window.configure(bg='#F0F8FF')
+    
+    # Title
+    title_label = tk.Label(enter_vars_window, text="Variable Configuration", bg='#F0F8FF', fg='#1e3d58', font=("Helvetica", 18, 'bold'))
+    title_label.pack(pady=20)
+    
+    # Main content frame
+    content_frame = tk.Frame(enter_vars_window, bg='#F0F8FF')
+    content_frame.pack(pady=10, padx=20, fill='both', expand=True)
+    
+    # Input frame with dark background
+    input_frame = tk.Frame(content_frame, bg="#2C3E50", relief='solid', bd=2)
+    input_frame.pack(pady=20, padx=20, fill='x')
+    
+    # Dependent variable section with proper alignment
+    dep_label = tk.Label(input_frame, text="Dependent Variable:", bg='#2C3E50', fg='white', font=("Helvetica", 12, 'bold'))
+    dep_label.pack(anchor='w', padx=20, pady=(15, 5))
+    
+    dep_entry = tk.Entry(input_frame, width=50, bg='#f0f8ff', font=("Arial", 11), bd=2)
+    dep_entry.pack(anchor='w', padx=20, pady=(0, 15))
 
-    tk.Label(enter_vars_window, text="Enter dependent variable:", bg='#ff7f50', fg='#1e3d58', font=("Helvetica", 16, 'bold')).pack(pady=10)
-    dep_entry = tk.Entry(enter_vars_window, width=50, bg='#f0f8ff', font=("Arial", 12), bd=3)
-    dep_entry.pack(pady=5)
-
-    # Independent variables input
-    tk.Label(enter_vars_window, text="Independent variables are selected automatically.", bg='#ff7f50', fg='#1e3d58', font=("Helvetica", 16, 'bold')).pack(pady=10)
-
+    # Independent variables info section
+    info_frame = tk.Frame(content_frame, bg='#F0F8FF')
+    info_frame.pack(pady=15, padx=20, fill='x')
+    
+    info_label = tk.Label(info_frame, text="✓ Independent variables are selected automatically from remaining columns.", bg='#F0F8FF', fg='#1e3d58', font=("Helvetica", 11, 'italic'))
+    info_label.pack(anchor='w')
 
 #set variable ---------------------second page--------------------------------------
     def set_variables():
@@ -87,17 +105,25 @@ def go_to_enter_variables_page():
         except ValueError as e:
             messagebox.showerror("Error", f"Error: {e}")
 
-    tk.Button(enter_vars_window, text="Set Variables", command=set_variables, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
+    # Button frame for proper alignment
+    button_frame = tk.Frame(content_frame, bg='#F0F8FF')
+    button_frame.pack(pady=30, fill='x')
+    
+    # Set Variables button
+    set_btn = tk.Button(button_frame, text="Set Variables", command=set_variables, bg='#1e3d58', fg='white', font=("Helvetica", 12, 'bold'), relief="raised", bd=3, width=15)
+    set_btn.pack(side='left', padx=10)
+    
+    # Preview Dataset button
+    preview_btn = tk.Button(button_frame, text="Preview Dataset", command=preview_dataset, bg='#1e3d58', fg='white', font=("Helvetica", 12, 'bold'), relief="raised", bd=3, width=15)
+    preview_btn.pack(side='left', padx=10)
 
-    #preview dataset button
-    tk.Button(enter_vars_window, text="Preview Dataset", command=preview_dataset, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
-
-    #button to go back to the main page
+    # Back button
     def go_back_to_root():
         enter_vars_window.destroy()
         root.deiconify()
     
-    tk.Button(enter_vars_window, text="Back", command=go_back_to_root,  bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
+    back_btn = tk.Button(button_frame, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 12, 'bold'), relief="raised", bd=3, width=15)
+    back_btn.pack(side='left', padx=10)
     
 
 
@@ -106,7 +132,7 @@ def go_to_algorithm_page():
     algo_window = tk.Toplevel(root)
     algo_window.title("Select Algorithm")
     algo_window.geometry("800x600")
-    algo_window.configure(bg='#ff7f50')
+    algo_window.configure(bg='#F0F8FF')
 
     def select_algorithm():
         algo_window.destroy()
@@ -125,7 +151,7 @@ def go_to_train_model_page():
     train_model_window = tk.Toplevel(root)
     train_model_window.title("Train Model")
     train_model_window.geometry("800x600")
-    train_model_window.configure(bg='#ff7f50')
+    train_model_window.configure(bg='#F0F8FF')
 
     def train_model():
         try:
@@ -172,18 +198,55 @@ def go_to_train_model_page():
 def go_to_prediction_page():
     prediction_window = tk.Toplevel(root)
     prediction_window.title("Enter Input Values")
-    prediction_window.geometry("800x600")
-    prediction_window.configure(bg='#ff7f50')
+    prediction_window.geometry("900x700")
+    prediction_window.configure(bg='#F0F8FF')
+
+    # Title
+    title_label = tk.Label(prediction_window, text="Make a Prediction", bg='#F0F8FF', fg='#1e3d58', font=("Helvetica", 18, 'bold'))
+    title_label.pack(pady=20)
+
+    # Main content frame
+    main_frame = tk.Frame(prediction_window, bg='#F0F8FF')
+    main_frame.pack(pady=10, padx=20, fill='both', expand=True)
+
+    # Create canvas with scrollbar
+    canvas = tk.Canvas(main_frame, bg='#2C3E50', relief='solid', bd=2, highlightthickness=0)
+    scrollbar = ttk.Scrollbar(main_frame, orient='vertical', command=canvas.yview)
+    
+    # Scrollable frame inside canvas
+    scrollable_frame = tk.Frame(canvas, bg='#2C3E50')
+    scrollable_frame.bind(
+        "<Configure>",
+        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+    )
+
+    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    # Pack canvas and scrollbar
+    canvas.pack(side='left', fill='both', expand=True)
+    scrollbar.pack(side='right', fill='y')
+
+    # Enable mousewheel scrolling only on canvas
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    canvas.bind("<MouseWheel>", _on_mousewheel)
 
     inputs = []
 
+    # Create input fields
     for feature in indep_selected:
-        frame = tk.Frame(prediction_window, bg='#ff7f50')
-        frame.pack(pady=5)
-        label = tk.Label(frame, text=f"Enter value for {feature}:", bg='#ff7f50', fg='#1e3d58', font=("Helvetica", 14))
-        label.pack(side=tk.LEFT, padx=5)
-        entry = tk.Entry(frame, bg='#f0f8ff', font=("Arial", 12), bd=3)
-        entry.pack(side=tk.RIGHT, padx=5)
+        # Create frame for each feature
+        feature_frame = tk.Frame(scrollable_frame, bg='#2C3E50')
+        feature_frame.pack(anchor='w', pady=10, padx=20, fill='x')
+        
+        # Label
+        label = tk.Label(feature_frame, text=f"{feature}:", bg='#2C3E50', fg='white', font=("Helvetica", 11, 'bold'), width=20, anchor='w')
+        label.pack(anchor='w', pady=(0, 5))
+        
+        # Entry
+        entry = tk.Entry(feature_frame, bg='#f0f8ff', font=("Arial", 11), bd=2, width=40)
+        entry.pack(anchor='w', padx=(0, 0))
         inputs.append(entry)
 
     def predict():
@@ -200,16 +263,26 @@ def go_to_prediction_page():
             else:
                 messagebox.showinfo("Prediction", "Predicted: No Diabetes")
     
-        except ValueError:
+        except ValueError as e:
             messagebox.showerror("Error", "Please enter valid numeric values.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Error during prediction: {e}")
 
-    tk.Button(prediction_window, text="Predict", command=predict, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
+    # Button frame for proper alignment
+    button_frame = tk.Frame(prediction_window, bg='#F0F8FF')
+    button_frame.pack(pady=20, fill='x')
     
+    # Predict button
+    predict_btn = tk.Button(button_frame, text="Predict", command=predict, bg='#1e3d58', fg='white', font=("Helvetica", 12, 'bold'), relief="raised", bd=3, width=15)
+    predict_btn.pack(side='left', padx=5)
+    
+    # Back button
     def go_back_to_root():
         prediction_window.destroy()
         root.deiconify()
     
-    tk.Button(prediction_window, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=4).pack(pady=20)
+    back_btn = tk.Button(button_frame, text="Back", command=go_back_to_root, bg='#1e3d58', fg='white', font=("Helvetica", 12, 'bold'), relief="raised", bd=3, width=15)
+    back_btn.pack(side='left', padx=10)
 
 
 
@@ -220,7 +293,7 @@ def go_to_prediction_page():
 root = tk.Tk()
 root.title("Diabetes Prediction")
 root.geometry("800x600")
-root.configure(bg='gray')
+root.configure(bg='#F0F8FF')
 
 navbar = tk.Frame(root, bg="#2C3E50", height=60)
 navbar.pack(fill="x")   # full width
@@ -231,7 +304,7 @@ title = tk.Label(
     text="Diabetes Prediction System",
     bg="#2C3E50",          # background color
     fg="white",         # text color
-    font=("Arial", 22, "bold")
+    font=("Sekuya", 22, "bold")
 )
 
 title.pack(pady=15)
