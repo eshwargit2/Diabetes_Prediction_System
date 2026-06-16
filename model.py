@@ -1,4 +1,4 @@
-#V1 branch
+#old  branch
 
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -355,7 +355,7 @@ next_button = tk.Button(root, text="Next", command=go_to_enter_variables_page, b
 
 
 
-# preview dataset function----
+# preview dataset function
 def preview_dataset():
     global df
 
