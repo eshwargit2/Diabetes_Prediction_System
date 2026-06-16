@@ -32,6 +32,8 @@ def load_dataset():
             #show dataset in the console
             preview_button.pack(pady=20)  # Show the preview button after loading the dataset
             next_button.pack(pady=20)  # Enable the Next button after loading the dataset
+
+            
             
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load dataset: {e}")
@@ -326,25 +328,31 @@ root.title("Diabetes Prediction")
 root.geometry("900x700")
 root.configure(bg='#F5F7FA')
 
-navbar = tk.Frame(root, bg="#1e3d58", height=80)
-navbar.pack(fill="x")   # full width
 
+#title , navbar box
+navbar = tk.Frame(root, bg="#1e3d58", height=30,)
+navbar.pack(fill="x")
 # Title inside navbar
-title = tk.Label(
-    navbar,
-    text="🏥 Diabetes Prediction System",
-    bg="#1e3d58",          # background color
-    fg="#FFFFFF",         # text color
-    font=("Helvetica", 26, "bold")
-)
-
+title = tk.Label(navbar,text="🏥 Diabetes Prediction System",bg="#1e3d58",fg="#FFFFFF",font=("Helvetica", 26, "bold"))
 title.pack(pady=20)
 
-# Main button
+#description box
+footer = tk.Frame(root,bg='#F5F7FA',height=30)
+footer.pack_propagate(True)
+center_box = tk.Frame(footer,bg="#1e3d58",bd=2,padx=50,pady=5).pack(expand=True)   
+description = tk.Label(center_box,bg="#1e3d58",text="This system using Machine Learning that analyzes patient health data and predicts diabetes or no diabetes",fg="white",pady=10,font=("Helvetica", 10, "bold")).pack(padx=30,pady=30)
+footer.pack(side="top", fill="x",padx=30,pady=30 )     
+
+
+# Load Button 
 load_btn = tk.Button(root, text="Load Dataset", command=load_dataset, bg='#3498DB', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=0, padx=30, pady=12, width=20, cursor='hand2')
 load_btn.pack(pady=40)
 
+#next Button
 next_button = tk.Button(root, text="Next", command=go_to_enter_variables_page, bg='#27AE60', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=0, padx=30, pady=12, width=20, cursor='hand2')
+
+
+
 
 
 # preview dataset function----
@@ -402,6 +410,6 @@ def preview_dataset():
     scroll_x.pack(side="bottom", fill="x")
     tree.pack(fill="both", expand=True)
 
+# preview Button 
 preview_button =tk.Button(root, text="Preview Dataset", command=preview_dataset, bg='#9B59B6', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=0, padx=30, pady=12, width=20, cursor='hand2')
-
 root.mainloop()
