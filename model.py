@@ -164,12 +164,53 @@ def go_to_algorithm_page():
         go_to_train_model_page()
 
     tk.Button(content_frame, text="Logistic Regression", command=select_algorithm, bg='#3498DB', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=0, padx=30, pady=12, width=25, cursor='hand2').pack(pady=20)
-    
+     
     def go_back_to_root():
         algo_window.destroy()
         root.deiconify()
     
     tk.Button(content_frame, text="Back", command=go_back_to_root, bg='#E74C3C', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=0, padx=30, pady=12, width=25, cursor='hand2').pack(pady=20)
+
+
+# Title with icon
+    title_frame = tk.Frame(content_frame, bg="#B4C6F3")
+    title_frame.pack(pady=(15, 5), anchor="w", padx=25)
+
+    tk.Label(
+    title_frame,
+    text="🧠 Machine Learning Concept",
+    bg="#B4C6F3",
+    fg="#1E3A5F",
+    font=("Helvetica", 14, "bold")
+).pack(side="left")
+
+
+# Description text
+    concept_text = (
+    "Supervised learning is a machine learning approach where models learn from labeled data. "
+    "In this project, Logistic Regression is used for binary classification to predict whether "
+    "a person has diabetes or not. The model analyzes health-related input data, learns patterns "
+    "from previous records, and uses a sigmoid function to calculate the probability of diabetes "
+    "for accurate prediction."
+)
+
+    tk.Label(content_frame,text=concept_text,
+    bg="#EAF2FF",              # softer background
+    fg="#222222",
+    font=("Arial", 11),
+    wraplength=680,
+    justify="left",
+    anchor="nw",
+    padx=18,                  # inner padding
+    pady=15,                 # inner padding
+    relief="groove",         # border effect
+    bd=2
+).pack(
+    pady=(5, 20),            # outer padding
+    padx=25,
+    fill="x"
+)
+
 
 # Function to go to the training model page ,------------------------4th page ---------------------------------------
 def go_to_train_model_page():
