@@ -16,6 +16,8 @@ y = None
 indep_selected = None
 classifier = None
 scaler = None
+label_encoders = {}  # Store LabelEncoder instances for categorical features
+categorical_features = []  # Store which features are categorical
 
 
 
@@ -81,7 +83,7 @@ def go_to_enter_variables_page():
     def set_variables():
         selected_dep = dep_entry.get().strip()
 
-        global X, y, indep_selected
+        global X, y, indep_selected, label_encoders, categorical_features
         try:
             # Validate and set independent and dependent variables
             if selected_dep not in df.columns:
@@ -95,10 +97,15 @@ def go_to_enter_variables_page():
             y = df[selected_dep].values
 
             # Handle categorical variables by encoding them
-            label_encoder = LabelEncoder()
+            label_encoders = {}  # Reset encoders
+            categorical_features = []  # Reset categorical features list
+            
             for col in indep_selected:
                 if df[col].dtype == 'object':  # Assuming categorical columns are of type 'object'
-                    df[col] = label_encoder.fit_transform(df[col])
+                    le = LabelEncoder()
+                    df[col] = le.fit_transform(df[col])
+                    label_encoders[col] = le  # Store the encoder for later use
+                    categorical_features.append(col)
 
             # Ensure all data is numeric
             X = df[indep_selected].values  # Make sure X is re-assigned after encoding
@@ -156,12 +163,53 @@ def go_to_algorithm_page():
         go_to_train_model_page()
 
     tk.Button(content_frame, text="Logistic Regression", command=select_algorithm, bg='#3498DB', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=0, padx=30, pady=12, width=25, cursor='hand2').pack(pady=20)
-    
+     
     def go_back_to_root():
         algo_window.destroy()
         root.deiconify()
     
     tk.Button(content_frame, text="Back", command=go_back_to_root, bg='#E74C3C', fg='white', font=("Helvetica", 14, 'bold'), relief="raised", bd=0, padx=30, pady=12, width=25, cursor='hand2').pack(pady=20)
+
+
+# Title with icon
+    title_frame = tk.Frame(content_frame, bg="#B4C6F3")
+    title_frame.pack(pady=(15, 5), anchor="w", padx=25)
+
+    tk.Label(
+    title_frame,
+    text="🧠 Machine Learning Concept",
+    bg="#B4C6F3",
+    fg="#1E3A5F",
+    font=("Helvetica", 14, "bold")
+).pack(side="left")
+
+
+# Description text
+    concept_text = (
+    "Supervised learning is a machine learning approach where models learn from labeled data. "
+    "In this project, Logistic Regression is used for binary classification to predict whether "
+    "a person has diabetes or not. The model analyzes health-related input data, learns patterns "
+    "from previous records, and uses a sigmoid function to calculate the probability of diabetes "
+    "for accurate prediction."
+)
+
+    tk.Label(content_frame,text=concept_text,
+    bg="#EAF2FF",              # softer background
+    fg="#222222",
+    font=("Arial", 11),
+    wraplength=680,
+    justify="left",
+    anchor="nw",
+    padx=18,                  # inner padding
+    pady=15,                 # inner padding
+    relief="groove",         # border effect
+    bd=2
+).pack(
+    pady=(5, 20),            # outer padding
+    padx=25,
+    fill="x"
+)
+
 
 # Function to go to the training model page ,------------------------4th page ---------------------------------------
 def go_to_train_model_page():
@@ -249,7 +297,7 @@ def go_to_prediction_page():
     right_frame = tk.Frame(main_frame, bg='#F5F7FA')
     right_frame.pack(side='right', fill='both', expand=True, padx=15)
 
-    inputs = []
+    inputs = {}  # Dictionary to store input widgets by feature name
 
     # Distribute input fields between left and right columns
     mid_point = len(indep_selected) // 2
@@ -262,28 +310,67 @@ def go_to_prediction_page():
         feature_frame = tk.Frame(target_frame, bg='#FFFFFF', relief='flat', bd=0)
         feature_frame.pack(anchor='w', pady=12, padx=15, fill='x')
         
+        # Check if feature is categorical
+        is_categorical = feature in categorical_features
+        
         # Label with improved styling
-        label = tk.Label(feature_frame, text=f"{feature}:", bg='#FFFFFF', fg='#1e3d58', font=("Helvetica", 11, 'bold'), width=22, anchor='w')
+        label_text = f"{feature}:" + (" (Text)" if is_categorical else " (Number)")
+        label = tk.Label(feature_frame, text=label_text, bg='#FFFFFF', fg='#1e3d58', font=("Helvetica", 11, 'bold'), width=25, anchor='w')
         label.pack(anchor='w', pady=(8, 4), padx=10)
         
-        # Entry with better styling
-        entry = tk.Entry(feature_frame, bg='#ECF0F1', font=("Arial", 11), bd=0, relief='flat', fg='#2C3E50')
-        entry.pack(anchor='w', padx=10, pady=(0, 8), fill='x', ipady=8)
-        
-        # Bind focus events for better UX
-        def on_focus_in(event, e=entry):
-            e.config(bg='#D5DBDB')
-        def on_focus_out(event, e=entry):
-            e.config(bg='#ECF0F1')
-        
-        entry.bind("<FocusIn>", on_focus_in)
-        entry.bind("<FocusOut>", on_focus_out)
-        
-        inputs.append(entry)
+        if is_categorical:
+            # Get unique values for categorical feature
+            encoder = label_encoders[feature]
+            unique_values = list(encoder.classes_)
+            
+            # Create dropdown for categorical input
+            combo = ttk.Combobox(feature_frame, values=unique_values, state='readonly', width=40, font=("Arial", 11))
+            combo.pack(anchor='w', padx=10, pady=(0, 8), fill='x', ipady=8)
+            inputs[feature] = combo
+        else:
+            # Entry for numeric input
+            entry = tk.Entry(feature_frame, bg='#ECF0F1', font=("Arial", 11), bd=0, relief='flat', fg='#2C3E50')
+            entry.pack(anchor='w', padx=10, pady=(0, 8), fill='x', ipady=8)
+            
+            # Bind focus events for better UX
+            def on_focus_in(event, e=entry):
+                e.config(bg='#D5DBDB')
+            def on_focus_out(event, e=entry):
+                e.config(bg='#ECF0F1')
+            
+            entry.bind("<FocusIn>", on_focus_in)
+            entry.bind("<FocusOut>", on_focus_out)
+            
+            inputs[feature] = entry
 
     def predict():
         try:
-            input_values = [float(entry.get()) for entry in inputs]  # Get input values from the user
+            input_values = []
+            
+            # Process each input and convert to appropriate numeric value
+            for feature in indep_selected:
+                widget = inputs[feature]
+                
+                if feature in categorical_features:
+                    # Get selected value from dropdown
+                    selected_value = widget.get()
+                    if not selected_value:
+                        messagebox.showerror("Error", f"Please select a value for {feature}")
+                        return
+                    
+                    # Convert categorical value to numeric using stored encoder
+                    encoder = label_encoders[feature]
+                    numeric_value = encoder.transform([selected_value])[0]
+                    input_values.append(numeric_value)
+                else:
+                    # Get numeric value from entry
+                    try:
+                        numeric_value = float(widget.get())
+                        input_values.append(numeric_value)
+                    except ValueError:
+                        messagebox.showerror("Error", f"Please enter a valid number for {feature}")
+                        return
+            
             input_array = np.array(input_values).reshape(1, -1)  # Reshape the input values
             input_array = scaler.transform(input_array)  # Scale input data using the fitted scaler
             
@@ -295,8 +382,6 @@ def go_to_prediction_page():
             else:
                 messagebox.showinfo("Prediction Result", "🟢 Predicted: No Diabetes")
     
-        except ValueError as e:
-            messagebox.showerror("Error", "Please enter valid numeric values.")
         except Exception as e:
             messagebox.showerror("Error", f"Error during prediction: {e}")
 
